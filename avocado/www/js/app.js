@@ -16,13 +16,17 @@ app.factory('surveyService', function () {
     y1 : "Cual es su satisfaccion general en Denny's?",
     x1 : "Que le parecio la limpieza?",
     x2 : "Que le parecio el servicio?",
-    x3 : "Que le parecio la comida?"
+    x3 : "Que le parecio la comida?",
+    x4 : "Que les parecio nuestro nuevo Frozen Avocado?",
+    x5 : "Saldrian en una cita con Mario?"
   }
 
   s.data.pairs = [
     {q1: "y1", q2: "x1"},
     {q1: "y1", q2: "x2"},
-    {q1: "y1", q2: "x3"}
+    {q1: "y1", q2: "x3"},
+    {q1: "y1", q2: "x4"},
+    {q1: "y1", q2: "x5"},
   ];
 
   
