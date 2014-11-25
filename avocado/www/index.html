@@ -26,7 +26,7 @@
     <ion-pane>
     
       
-      <ion-slide-box>
+      <ion-slide-box show-pager="false" ng-init="disableSlide()">
         <ion-slide>
           <h1>{{ data.questions[data.pairs[data.counter].q1] }}</h1>
             <ion-footer-bar class="bar-dark celsius-bar">
@@ -39,6 +39,7 @@
             </ion-footer-bar>
         </ion-slide>
         <ion-slide>
+          <p> Ultima pregunta.. </p>
           <h1>{{ data.questions[data.pairs[data.counter].q2] }}</h1>
           <ion-footer-bar class="bar-dark celsius-bar">
              <div class="button-bar">

@@ -36,15 +36,15 @@ app.factory('surveyService', function () {
   };
 
   s.answerQ2 = function(score) {
-    s.data.answers[s.data.counter] = {
-      q2key : s.data.pairs[s.data.counter].q1,
-      q2score : score,
-      q2time : new Date().toLocaleString() 
-    };
-
+    s.data.answers[s.data.counter].q2key = s.data.pairs[s.data.counter].q2;
+    s.data.answers[s.data.counter].q2score = score;
+    s.data.answers[s.data.counter].q2time = new Date().toLocaleString(); 
+    
+    sendData(s.data.answers[s.data.counter]);
+    
     updateCounter();
 
-    sendData(s.data.answers[s.data.counter]);
+    
 
   };
 
@@ -53,9 +53,9 @@ app.factory('surveyService', function () {
     console.log("counter is " + s.data.counter);
   };
   
-  var sendData = function(){
+  var sendData = function(record){
     //to firebase
-    console.log("sending!");
+    console.log("sending!", record);
   };
    
 
@@ -64,7 +64,14 @@ app.factory('surveyService', function () {
 
 app.controller('mainController', function($scope,$ionicSlideBoxDelegate, $timeout, surveyService) {
   // Main app controller, empty for the example
+  
+  var qTimeout;
   $scope.data = surveyService.data;
+  
+  $scope.disableSlide = function(){
+    var isnabled = $ionicSlideBoxDelegate.enableSlide(false);
+    console.log(isnabled);  
+  };
 
   $scope.nextSlide = function(){
     $ionicSlideBoxDelegate.next();
@@ -73,9 +80,12 @@ app.controller('mainController', function($scope,$ionicSlideBoxDelegate, $timeou
   $scope.answerQ1 = function(score){
     surveyService.answerQ1(score);
     $ionicSlideBoxDelegate.next();
+    qTimeout = $timeout(function (){$ionicSlideBoxDelegate.slide(0);}, 15000)
+    
   };
 
   $scope.answerQ2 = function(score){
+    $timeout.cancel(qTimeout);
     $ionicSlideBoxDelegate.next();
     surveyService.answerQ2(score);
     $timeout(function (){$ionicSlideBoxDelegate.slide(0);}, 3000)
