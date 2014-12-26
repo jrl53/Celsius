@@ -2,11 +2,10 @@
     background-size: 200px 200px;
     background-repeat: no-repeat;
     background-color: transparent;
-    background-position: right 25px bottom 0px;
-    height: 200px;
-    width: 200px;
-    border-style: none;
+    background-position: right 25px bottom 0px; 
  
+    border-style: none;
+    height: 200px;
 }
 
 .button-avo-sad {
@@ -23,7 +22,7 @@
 }
 
 .celsius-bar {
-    height: 200px;
+    height: 220px;
     background-color: transparent;
 }
 

@@ -15,7 +15,8 @@ app.factory('surveyService', function ($rootScope) {
   s.data.questions = {};
 
   fb.child("questions").once("value", function(data){
-      s.data.questions = data.val();
+      console.log(data.val().length);
+      pairHelper(countQ(data.val(), 'y') , countQ(data.val(), 'x'));
       if($rootScope.$root.$$phase != '$apply' && $rootScope.$root.$$phase != '$digest'){
           $rootScope.$apply(function() {
             s.data.questions = data.val();
@@ -24,13 +25,11 @@ app.factory('surveyService', function ($rootScope) {
        else {
          s.data.questions = data.val();
       }
+      
+      
   });
   
-  s.data.pairs = [
-    {q1: "y1", q2: "x1"},
-    {q1: "y1", q2: "x2"},
-    {q1: "y1", q2: "x3"}
-  ];
+  s.data.pairs = [];
 
   
   s.answerQ1 = function(score) {
@@ -64,7 +63,61 @@ app.factory('surveyService', function ($rootScope) {
     fb.child("answers").push(record);
   };
    
+  
+ //Helper functions
+    
+  var pairHelper = function(ynum, xnum){
+      console.log("Running pairHelper with ynum=" + ynum + ", and xnum=" + xnum);
+      for(i=0;i<ynum;i++){
+        for(j=0;j<xnum;j++){
+          s.data.pairs.push({q1: "y" + (i+1), q2: "x" + (j+1)});
+        }
+      }
+      console.log("Question pair set: ", s.data.pairs);
+      shuffle(s.data.pairs);
+      console.log("Pair set after random: ", s.data.pairs);
+      
+      
+  };
+    
+    
+  function countQ(p,qType){
+      var ct = 0;
+      for (var key in p) {
+          if (p.hasOwnProperty(key)) {
+            if(key.substring(0,1) == qType){
+              ct++;
+            }
+          }
+      }
+      
+      return ct;
+  }
+    
+  
+ 
+    
+    function shuffle(array) {
+      var currentIndex = array.length, temporaryValue, randomIndex ;
 
+      // While there remain elements to shuffle...
+      while (0 !== currentIndex) {
+
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+
+        // And swap it with the current element.
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+      }
+
+      return array;
+    }
+    
+    
+    
   return s;
 });
 
