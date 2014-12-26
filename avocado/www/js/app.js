@@ -14,6 +14,8 @@ app.factory('surveyService', function ($rootScope) {
   s.data.answers = [];
   s.data.questions = {};
 
+  //Get questions from Firebase***********************8
+    
   fb.child("questions").once("value", function(data){
       console.log(data.val().length);
       pairHelper(countQ(data.val(), 'y') , countQ(data.val(), 'x'));
@@ -31,10 +33,10 @@ app.factory('surveyService', function ($rootScope) {
   
   s.data.pairs = [];
 
-  
   s.answerQ1 = function(score) {
     s.data.answers[s.data.counter] = {
       q1key : s.data.pairs[s.data.counter].q1,
+      q1text : s.data.questions[s.data.pairs[s.data.counter].q1],
       q1score : score,
       q1time : new Date().toLocaleString() 
     };
@@ -43,6 +45,7 @@ app.factory('surveyService', function ($rootScope) {
 
   s.answerQ2 = function(score) {
     s.data.answers[s.data.counter].q2key = s.data.pairs[s.data.counter].q2;
+    s.data.answers[s.data.counter].q2text = s.data.questions[s.data.pairs[s.data.counter].q2]
     s.data.answers[s.data.counter].q2score = score;
     s.data.answers[s.data.counter].q2time = new Date().toLocaleString(); 
     
