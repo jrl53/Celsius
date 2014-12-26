@@ -16,10 +16,13 @@
     <script src="lib/ionic/js/ionic.bundle.js"></script>
 
     <!-- cordova script (this will be a 404 during development) -->
-    <script src="cordova.js"></script>
+      <script src="cordova.js"></script>
 
     <!-- your app's js -->
     <script src="js/app.js"></script>
+      <!--firebase-->
+     <script src="https://cdn.firebase.com/js/client/2.0.6/firebase.js"></script>
+      
   </head>
   <body ng-app="avocado" animation="slide-left-right-ios7" ng-controller="mainController">
 
@@ -29,24 +32,24 @@
       <ion-slide-box show-pager="false" ng-init="disableSlide()">
         <ion-slide>
           <h1>{{ data.questions[data.pairs[data.counter].q1] }}</h1>
-            <ion-footer-bar class="bar-dark celsius-bar">
+            <ion-footer-bar class="celsius-bar">
              <div class="button-bar">
-                <button class="button" ng-click="answerQ1(1)">Button</button>
-                <button class="button" ng-click="answerQ1(2)">Button</button>
-                <button class="button" ng-click="answerQ1(3)">Button</button>
-                <button class="button" ng-click="answerQ1(4)">Button</button>
+                <button class="button button-avocado button-avo-sad" ng-click="answerQ1(1)"></button>
+                <button class="button button-avocado button-avo-midSad" ng-click="answerQ1(2)"></button>
+                <button class="button button-avocado button-avo-midHappy" ng-click="answerQ1(3)"></button>
+                <button class="button button-avocado button-avo-happy" ng-click="answerQ1(4)"></button>
               </div>
             </ion-footer-bar>
         </ion-slide>
         <ion-slide>
           <p> Ultima pregunta.. </p>
           <h1>{{ data.questions[data.pairs[data.counter].q2] }}</h1>
-          <ion-footer-bar class="bar-dark celsius-bar">
+          <ion-footer-bar class="celsius-bar">
              <div class="button-bar">
-                <button class="button" ng-click="answerQ2(1)">Button</button>
-                <button class="button" ng-click="answerQ2(2)">Button</button>
-                <button class="button" ng-click="answerQ2(3)">Button</button>
-                <button class="button" ng-click="answerQ2(4)">Button</button>
+                <button class="button button-avocado button-avo-sad" ng-click="answerQ2(1)"></button>
+                <button class="button button-avocado button-avo-midSad" ng-click="answerQ2(2)"></button>
+                <button class="button button-avocado button-avo-midHappy" ng-click="answerQ2(3)"></button>
+                <button class="button button-avocado button-avo-happy" ng-click="answerQ2(4)"></button>
               </div>
             </ion-footer-bar>
         </ion-slide>

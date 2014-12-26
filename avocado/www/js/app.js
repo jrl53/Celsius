@@ -5,28 +5,31 @@
 // the 2nd parameter is an array of 'requires'
 var app = angular.module('avocado', ['ionic']);
 
-app.factory('surveyService', function () {
+app.factory('surveyService', function ($rootScope) {
   var s = {};
-  
+  var fb = new Firebase("https://celsius-avocado.firebaseio.com");
   s.data = {};
   
   s.data.counter = 0;
   s.data.answers = [];
-  s.data.questions = {
-    y1 : "Cual es su satisfaccion general en Denny's?",
-    x1 : "Que le parecio la limpieza?",
-    x2 : "Que le parecio el servicio?",
-    x3 : "Que le parecio la comida?",
-    x4 : "Que les parecio nuestro nuevo Frozen Avocado?",
-    x5 : "Saldrian en una cita con Mario?"
-  }
+  s.data.questions = {};
 
+  fb.child("questions").once("value", function(data){
+      s.data.questions = data.val();
+      if($rootScope.$root.$$phase != '$apply' && $rootScope.$root.$$phase != '$digest'){
+          $rootScope.$apply(function() {
+            s.data.questions = data.val();
+          });
+       }
+       else {
+         s.data.questions = data.val();
+      }
+  });
+  
   s.data.pairs = [
     {q1: "y1", q2: "x1"},
     {q1: "y1", q2: "x2"},
-    {q1: "y1", q2: "x3"},
-    {q1: "y1", q2: "x4"},
-    {q1: "y1", q2: "x5"},
+    {q1: "y1", q2: "x3"}
   ];
 
   
@@ -48,8 +51,6 @@ app.factory('surveyService', function () {
     
     updateCounter();
 
-    
-
   };
 
   var updateCounter = function(){
@@ -60,6 +61,7 @@ app.factory('surveyService', function () {
   var sendData = function(record){
     //to firebase
     console.log("sending!", record);
+    fb.child("answers").push(record);
   };
    
 
@@ -68,9 +70,19 @@ app.factory('surveyService', function () {
 
 app.controller('mainController', function($scope,$ionicSlideBoxDelegate, $timeout, surveyService) {
   // Main app controller, empty for the example
-  
+  var fb = new Firebase("https://celsius-avocado.firebaseio.com");
   var qTimeout;
   $scope.data = surveyService.data;
+  
+      
+  $scope.$watch(function(){
+    return surveyService.data;
+  },
+    function(newVal, oldVal){
+      console.log(newVal);
+      $scope.data = newVal;
+      
+  }, true);
   
   $scope.disableSlide = function(){
     var isnabled = $ionicSlideBoxDelegate.enableSlide(false);

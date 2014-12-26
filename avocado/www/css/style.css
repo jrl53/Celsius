@@ -1,5 +1,30 @@
+.button-avocado {
+    background-size: 200px 200px;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    background-position: right 25px bottom 0px;
+    height: 200px;
+    width: 200px;
+    border-style: none;
+ 
+}
+
+.button-avo-sad {
+    background-image: url( '../img/Cara triste celsius transp-01.png' );
+}
+.button-avo-midSad {
+    background-image: url( '../img/Cara medio triste celsius transp-01.png' );
+}
+.button-avo-midHappy {
+    background-image: url( '../img/Cara medio feliz celsius transp-01.png' );
+}
+.button-avo-happy {
+    background-image: url( '../img/Cara feliz celsius transp-01.png' );
+}
+
 .celsius-bar {
-height: 25%;
+    height: 200px;
+    background-color: transparent;
 }
 
 .box {
@@ -16,7 +41,7 @@ body {
 .slider-slide {
   padding-top: 150px;
   color: #000;
-  background-color: khaki;
+  background-color: LemonChiffon;
   text-align: center;
 
   font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
