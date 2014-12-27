@@ -38,16 +38,16 @@ app.factory('surveyService', function ($rootScope) {
       q1key : s.data.pairs[s.data.counter].q1,
       q1text : s.data.questions[s.data.pairs[s.data.counter].q1],
       q1score : score,
-      q1time : new Date().toLocaleString() 
+      q1time : Date.now()
     };
 
   };
 
   s.answerQ2 = function(score) {
     s.data.answers[s.data.counter].q2key = s.data.pairs[s.data.counter].q2;
-    s.data.answers[s.data.counter].q2text = s.data.questions[s.data.pairs[s.data.counter].q2]
+    s.data.answers[s.data.counter].q2text = s.data.questions[s.data.pairs[s.data.counter].q2];
     s.data.answers[s.data.counter].q2score = score;
-    s.data.answers[s.data.counter].q2time = new Date().toLocaleString(); 
+    s.data.answers[s.data.counter].q2time = Date.now();
     
     sendData(s.data.answers[s.data.counter]);
     
