@@ -24,6 +24,7 @@
       <!--firebase-->
      <script src="https://cdn.firebase.com/js/client/2.0.6/firebase.js"></script>
       
+      
   </head>
   <body ng-app="avocado" animation="slide-left-right-ios7" ng-controller="mainController">
 
@@ -43,7 +44,7 @@
             </ion-footer-bar>
         </ion-slide>
         <ion-slide>
-          <p> Ultima pregunta.. </p>
+          <p class="smallText"> Ultima pregunta.. </p>
           <h1>{{ data.questions[data.pairs[data.counter].q2] }}</h1>
           <ion-footer-bar class="celsius-bar">
              <div class="button-bar">

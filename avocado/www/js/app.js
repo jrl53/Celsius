@@ -8,6 +8,7 @@ var app = angular.module('avocado', ['ionic']);
 app.factory('surveyService', function ($rootScope) {
   var s = {};
   var fb = new Firebase("https://celsius-avocado.firebaseio.com");
+  var timerId = {};
   s.data = {};
   
   s.data.counter = 0;
@@ -16,21 +17,51 @@ app.factory('surveyService', function ($rootScope) {
 
   //Get questions from Firebase***********************8
     
-  fb.child("questions").once("value", function(data){
-      console.log(data.val().length);
-      pairHelper(countQ(data.val(), 'y') , countQ(data.val(), 'x'));
-      if($rootScope.$root.$$phase != '$apply' && $rootScope.$root.$$phase != '$digest'){
-          $rootScope.$apply(function() {
-            s.data.questions = data.val();
-          });
-       }
-       else {
-         s.data.questions = data.val();
-      }
-      
-      
-  });
+  function getQuestions()  {
+      fb.child("questions").once("value", function(data){
+          console.log(data.val().length);
+          pairHelper(countQ(data.val(), 'y') , countQ(data.val(), 'x'));
+          if($rootScope.$root.$$phase != '$apply' && $rootScope.$root.$$phase != '$digest'){
+              $rootScope.$apply(function() {
+                s.data.questions = data.val();
+              });
+           }
+           else {
+             s.data.questions = data.val();
+          }  
+    });
+ }
   
+  
+    
+  //Report status and check for changes in questions
+    function reportFB(){
+        var now = new Date().toLocaleString();
+        fbStat = fb.child("status");
+        console.log(now);
+        fbStat.update({lastChecked: now});
+        
+        //Check if we want to reset
+        fbStat.once("value", function(data){
+            if(data.val().reset){
+                console.log("Resetting Questions");
+                getQuestions();
+                if(data.val().interval > 0){
+                    console.log("Resetting interval");
+                    clearInterval(timerId);
+                    timerId = setInterval(reportFB,data.val().interval);
+                }
+                fbStat.update({reset: false, lastUpdated: new Date().toLocaleString()});
+            }
+        });
+        
+    }
+    
+  getQuestions();
+  
+  //Set timer initially
+  timerId = setInterval(reportFB,10000);
+    
   s.data.pairs = [];
 
   s.answerQ1 = function(score) {
@@ -71,6 +102,7 @@ app.factory('surveyService', function ($rootScope) {
     
   var pairHelper = function(ynum, xnum){
       console.log("Running pairHelper with ynum=" + ynum + ", and xnum=" + xnum);
+      s.data.pairs = [];
       for(i=0;i<ynum;i++){
         for(j=0;j<xnum;j++){
           s.data.pairs.push({q1: "y" + (i+1), q2: "x" + (j+1)});
@@ -152,7 +184,7 @@ app.controller('mainController', function($scope,$ionicSlideBoxDelegate, $timeou
   $scope.answerQ1 = function(score){
     surveyService.answerQ1(score);
     $ionicSlideBoxDelegate.next();
-    qTimeout = $timeout(function (){$ionicSlideBoxDelegate.slide(0);}, 15000)
+    qTimeout = $timeout(function (){$ionicSlideBoxDelegate.slide(0);}, 12000)
     
   };
 
