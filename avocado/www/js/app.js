@@ -15,12 +15,15 @@ app.factory('surveyService', function ($rootScope) {
   s.data.answers = [];
   s.data.questions = {};
 
-  //Get questions from Firebase***********************8
+  //Get questions from Firebase and set listeners***********************8
     
   function getQuestions()  {
-      fb.child("questions").once("value", function(data){
-          console.log(data.val().length);
-          pairHelper(countQ(data.val(), 'y') , countQ(data.val(), 'x'));
+      fb.child("questions").on("value", function(data){
+          console.log("Updating questions");
+          s.data.counter = 0; 
+          console.log("Testing separate=", separateXY(data.val()));
+          
+          pairHelper(separateXY(data.val()));
           if($rootScope.$root.$$phase != '$apply' && $rootScope.$root.$$phase != '$digest'){
               $rootScope.$apply(function() {
                 s.data.questions = data.val();
@@ -28,39 +31,41 @@ app.factory('surveyService', function ($rootScope) {
            }
            else {
              s.data.questions = data.val();
-          }  
+          }
+          fb.child("status").child("latestQuestionSet").set(s.data.questions);
+          fb.child("status").child("lastQuestionsUpdated").set(new Date().toLocaleString());
     });
  }
-  
-  
     
-  //Report status and check for changes in questions
+   //Check if we want to reset
+    fb.child("status").child("interval").on("value", function(data){
+        if(data.val() >= 60000){
+            var oldTimerId = timerId;
+            console.log("Resetting interval");
+            clearInterval(timerId);
+            timerId = setInterval(reportFB,data.val());
+            fb.child("status").update({lastTimerUpdated: new Date().toLocaleString() + 
+                           ", Old id: " + oldTimerId + ", " +
+                           "New id: " + timerId});
+        }
+        else {
+            fb.child("status").update({lastTimerUpdated: "Interval too low? Must be >= 60000"});
+        }
+    });
+  
+  
+  //Report status and check for timeinterval reset
     function reportFB(){
         var now = new Date().toLocaleString();
         fbStat = fb.child("status");
         console.log(now);
         fbStat.update({lastChecked: now});
-        
-        //Check if we want to reset
-        fbStat.once("value", function(data){
-            if(data.val().reset){
-                console.log("Resetting Questions");
-                getQuestions();
-                if(data.val().interval > 0){
-                    console.log("Resetting interval");
-                    clearInterval(timerId);
-                    timerId = setInterval(reportFB,data.val().interval);
-                }
-                fbStat.update({reset: false, lastUpdated: new Date().toLocaleString()});
-            }
-        });
-        
     }
     
   getQuestions();
   
   //Set timer initially
-  timerId = setInterval(reportFB,10000);
+  timerId = setInterval(reportFB,60*60*1000);
     
   s.data.pairs = [];
 
@@ -100,12 +105,12 @@ app.factory('surveyService', function ($rootScope) {
   
  //Helper functions
     
-  var pairHelper = function(ynum, xnum){
-      console.log("Running pairHelper with ynum=" + ynum + ", and xnum=" + xnum);
+  var pairHelper = function(p){
+      console.log("Running PariHelper");
       s.data.pairs = [];
-      for(i=0;i<ynum;i++){
-        for(j=0;j<xnum;j++){
-          s.data.pairs.push({q1: "y" + (i+1), q2: "x" + (j+1)});
+      for(yKey in p.y){
+        for(xKey in p.x){
+          s.data.pairs.push({q1: yKey, q2: xKey });
         }
       }
       console.log("Question pair set: ", s.data.pairs);
@@ -116,19 +121,22 @@ app.factory('surveyService', function ($rootScope) {
   };
     
     
-  function countQ(p,qType){
-      var ct = 0;
-      for (var key in p) {
-          if (p.hasOwnProperty(key)) {
-            if(key.substring(0,1) == qType){
-              ct++;
-            }
-          }
-      }
+  function separateXY(p){
+      var res = {
+        x : {},
+        y : {}
+      };
       
-      return ct;
+      for(var key in p) {
+        if(p.hasOwnProperty(key)) {
+            if(key.substring(0,1) == 'y') {
+            res.y[key] = p[key];
+            }
+        else res.x[key] = p[key];
+        }
+      }
+      return res;
   }
-    
   
  
     
