@@ -12,7 +12,7 @@ h1 {
     background-size: 200px 200px;
     background-repeat: no-repeat;
     background-color: transparent;
-    background-position: right 25px bottom 0px; 
+    background-position: right 55px bottom 0px; 
  
     border-style: none;
     height: 200px;
@@ -48,7 +48,7 @@ body {
   height: 100%;
 }
 .slider-slide {
- /* padding-top: 150px; */
+  padding-top: 20px; 
   color: #000;
   background-color: LemonChiffon;
   text-align: center;
