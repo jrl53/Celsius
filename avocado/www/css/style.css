@@ -4,9 +4,8 @@
 
 h1 {
     font-size: 500%;
-	margin-left: 10%;
-	margin-right: 10%;
-	
+	margin-left: 5%;
+	margin-right: 5%;
 }
 
 .button-avocado {
@@ -49,7 +48,7 @@ body {
   height: 100%;
 }
 .slider-slide {
-  padding-top: 150px;
+ /* padding-top: 150px; */
   color: #000;
   background-color: LemonChiffon;
   text-align: center;
@@ -75,4 +74,20 @@ body {
   text-align: left;
   list-style: decimal;
   margin: 10px 0px;
+}
+
+.esp {
+	
+}
+
+.eng{
+	font-style: italic;
+	color: gray;
+
+}
+
+.vert-center {
+  position: relative;
+  top: 35%;
+  transform: translateY(-65%);
 }

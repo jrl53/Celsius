@@ -4,7 +4,11 @@
 
         <ion-slide-box show-pager="false" ng-init="disableSlide()">
             <ion-slide>
-                <h1>{{ data.questions[data.pairs[data.counter].q1] }}</h1>
+                <div class="vert-center">
+					<h1 class="esp">{{ data.questions[data.pairs[data.counter].q1] }}</h1>
+					<h1 class="eng">{{ data.questions.eng[data.pairs[data.counter].q1] }}</h1>
+				</div>
+				
                 <ion-footer-bar class="celsius-bar">
                     <div class="button-bar">
                         <button class="button button-avocado button-avo-sad" ng-click="answerQ1(1)"></button>
@@ -13,10 +17,14 @@
                         <button class="button button-avocado button-avo-happy" ng-click="answerQ1(4)"></button>
                     </div>
                 </ion-footer-bar>
+				
             </ion-slide>
             <ion-slide>
-                <p class="smallText"> Ultima pregunta.. </p>
-                <h1>{{ data.questions[data.pairs[data.counter].q2] }}</h1>
+             <!--   <p class="smallText"> Ultima pregunta.. </p> -->
+				<div class="vert-center">
+                	<h1 class="esp">{{ data.questions[data.pairs[data.counter].q2] }}</h1>
+					<h1 class="eng">{{ data.questions.eng[data.pairs[data.counter].q2] }}</h1>
+				</div>
                 <ion-footer-bar class="celsius-bar">
                     <div class="button-bar">
                         <button class="button button-avocado button-avo-sad" ng-click="answerQ2(1)"></button>

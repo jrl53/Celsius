@@ -59,7 +59,7 @@ app.controller('mainController', function ($scope, $ionicSlideBoxDelegate, $time
             return surveyService.data;
         },
         function (newVal, oldVal) {
-            console.log(newVal);
+            console.log("inside watch", newVal);
             $scope.data = newVal;
 
         }, true);

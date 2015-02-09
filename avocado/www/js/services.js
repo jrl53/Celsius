@@ -161,7 +161,6 @@ app.factory('surveyService', function ($rootScope,  fbURL) {
         });
     }
 
-    
 
     s.data.pairs = [];
 
@@ -198,7 +197,6 @@ app.factory('surveyService', function ($rootScope,  fbURL) {
         fb.child("answers").push(record);
     };
 
-
     //Helper functions---------------------------------------------------------
 
     var pairHelper = function (p) {
@@ -230,13 +228,13 @@ app.factory('surveyService', function ($rootScope,  fbURL) {
             if (p.hasOwnProperty(key)) {
                 if (key.substring(0, 1) == 'y') {
                     res.y[key] = p[key];
-                } else res.x[key] = p[key];
+                } else if (key.substring(0,1) == 'x'){
+					res.x[key] = p[key];
+				}
             }
         }
         return res;
     }
-
-
 
     function shuffle(array) {
         var currentIndex = array.length,
